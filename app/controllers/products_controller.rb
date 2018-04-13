@@ -10,6 +10,7 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
+   read_redis
   end
 
   # GET /products/new
@@ -28,7 +29,6 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.save
-        insert_redis
 
         format.html { redirect_to @product, notice: 'Product was successfully created.' }
         format.json { render :show, status: :created, location: @product }
@@ -44,7 +44,6 @@ class ProductsController < ApplicationController
   def update
     respond_to do |format|
       if @product.update(product_params)
-        insert_redis
 
         format.html { redirect_to @product, notice: 'Product was successfully updated.' }
         format.json { render :show, status: :ok, location: @product }
@@ -77,7 +76,10 @@ class ProductsController < ApplicationController
     params.require(:product).permit(:name, :sku, :description, :quantity, :price)
   end
 
-  def insert_redis
-    $redis.set('product:id_' << @product._id.to_s, @product.to_json)
+  def read_redis
+    if @product.from_redis.nil?
+      @product = Product.find(params[:id])
+      @product.to_redis
+    end
   end
 end
