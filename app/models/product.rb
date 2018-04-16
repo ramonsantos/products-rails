@@ -1,6 +1,8 @@
 class Product
   include Mongoid::Document
 
+  after_save :save_elastic_search
+
   field :name, type: String
   field :sku, type: String
   field :description, type: String
@@ -37,6 +39,17 @@ class Product
     self.from_json project_json
   end
 
+  def to_hash
+    {
+      id: self._id,
+      name: self.name,
+      sku: self.sku,
+      description: self.description,
+      quantity: self.quantity,
+      price: self.price
+    }
+  end
+
   private
 
   def redis_key
@@ -45,5 +58,9 @@ class Product
 
   def del_redis_key
     $redis.del(redis_key)
+  end
+
+  def save_elastic_search
+    $es_repository.save self
   end
 end
