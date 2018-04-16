@@ -2,6 +2,7 @@ class Product
   include Mongoid::Document
 
   after_save :save_elastic_search
+  after_destroy :delete_elestic_search
 
   field :name, type: String
   field :sku, type: String
@@ -12,7 +13,7 @@ class Product
   def save
     super
 
-    to_redis
+   to_redis
   end
 
   def update(product_params)
@@ -62,5 +63,9 @@ class Product
 
   def save_elastic_search
     $es_repository.save self
+  end
+
+  def delete_elestic_search
+    $es_repository.delete self
   end
 end
