@@ -49,12 +49,18 @@ class Product
       description: self.description,
       quantity: self.quantity,
       price: self.price,
+      created_at: self.created_at,
       updated_at: self.updated_at
     }
   end
 
   def self.search(search)
-    $es_repository.search(query: { match: { name: search} }).map {|p| p.id = p.id["$oid"].to_s; p}
+    $es_repository.search(
+        query: {
+          query_string: {
+            query: ("*" << search << "*"), fields: [:name, :sku, :description]
+          }
+        }).map {|p| p.id = p.id["$oid"].to_s; p}
   end
 
   private
