@@ -1,8 +1,13 @@
 <p id="notice"><%= notice %></p>
 
+<h1>Products</h1>
 
+<h2>Search</h2>
 
-
+<%= form_tag(products_path, :method => "get", id: "search-form") do %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search..." %>
+  <%= submit_tag "Search", :name => nil %>
+<% end %>
 
 <h2>Listing Products</h2>
 
@@ -27,7 +32,7 @@
         <td><%= product.quantity %></td>
         <td><%= product.price %></td>
         <td><%= link_to 'Show', product %></td>
-        <td><%= link_to 'Edit', edit_product_path(product) %></td>
+        <td><%= link_to 'Edit', edit_product_path(product.id) %></td>
         <td><%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

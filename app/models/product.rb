@@ -13,7 +13,7 @@ class Product
   def save
     super
 
-   to_redis
+    to_redis
   end
 
   def update(product_params)
@@ -42,13 +42,17 @@ class Product
 
   def to_hash
     {
-      id: self._id,
+      id: self.id,
       name: self.name,
       sku: self.sku,
       description: self.description,
       quantity: self.quantity,
       price: self.price
     }
+  end
+
+  def self.search(search)
+    $es_repository.search(query: { match: { name: "*" << search << "*"} }).map {|p| p.id = p.id["$oid"].to_s; p}
   end
 
   private
