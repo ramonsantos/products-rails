@@ -1,5 +1,6 @@
 class Product
   include Mongoid::Document
+  include Mongoid::Timestamps
 
   after_save :save_elastic_search
   after_destroy :delete_elestic_search
@@ -47,12 +48,13 @@ class Product
       sku: self.sku,
       description: self.description,
       quantity: self.quantity,
-      price: self.price
+      price: self.price,
+      updated_at: self.updated_at
     }
   end
 
   def self.search(search)
-    $es_repository.search(query: { match: { name: "*" << search << "*"} }).map {|p| p.id = p.id["$oid"].to_s; p}
+    $es_repository.search(query: { match: { name: search} }).map {|p| p.id = p.id["$oid"].to_s; p}
   end
 
   private
