@@ -1,10 +1,11 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :set_product, only: [:show, :edit]
+  before_action :find_product, only: [:update, :destroy]
 
   # GET /products
   # GET /products.json
   def index
-    unless params[:search].blank?
+    if params[:search].present?
       @products = Product.search(params[:search])
     else
       @products = Product.all
@@ -14,7 +15,6 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
-   read_redis
   end
 
   # GET /products/new
@@ -70,20 +70,20 @@ class ProductsController < ApplicationController
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_product
+  def find_product
     @product = Product.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
-  def product_params
-    params.require(:product).permit(:name, :sku, :description, :quantity, :price)
-  end
+  def set_product
+    @product = Product.from_redis(params[:id])
 
-  def read_redis
-    if @product.from_redis.nil?
+    if @product.nil?
       @product = Product.find(params[:id])
       @product.to_redis
     end
+  end
+
+  def product_params
+    params.require(:product).permit(:name, :sku, :description, :quantity, :price)
   end
 end

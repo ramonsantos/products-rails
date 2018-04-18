@@ -2,53 +2,37 @@ class Product
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  after_save :save_elastic_search
-  after_destroy :delete_elestic_search
-
   field :name, type: String
   field :sku, type: String
   field :description, type: String
   field :quantity, type: Integer
   field :price, type: Float
+  field :bar_code, type: String
 
-  def save
-    super
+  validates_presence_of :name
 
-    to_redis
-  end
-
-  def update(product_params)
-    super(product_params)
-
-    to_redis
-  end
-
-  def destroy
-    super
-
-    del_redis_key
-  end
+  after_save :save_elastic_search, :to_redis
+  after_destroy :delete_elestic_search, :del_redis_key
 
   def to_redis
-    $redis.set(redis_key, self.to_json)
+    $redis.set(Product.redis_key(self.id), JSON(self.to_hash))
   end
 
-  def from_redis
-    project_json = $redis.get(redis_key)
+  def self.from_redis(id)
+    product_json = $redis.get(redis_key(id))
 
-    return nil if project_json.nil?
-
-    self.from_json project_json
+    Product.new.from_json(product_json) unless product_json.nil?
   end
 
   def to_hash
     {
-      id: self.id,
+      id: self.id.to_s,
       name: self.name,
       sku: self.sku,
       description: self.description,
       quantity: self.quantity,
       price: self.price,
+      bar_code: self.bar_code,
       created_at: self.created_at,
       updated_at: self.updated_at
     }
@@ -56,28 +40,28 @@ class Product
 
   def self.search(search)
     $es_repository.search(
-        query: {
-          query_string: {
-            query: ("*" << search << "*"), fields: [:name, :sku, :description]
-          }
-        }).map {|p| p.id = p.id["$oid"].to_s; p}
+      query: {
+        query_string: {
+          query: ("*" << search << "*"), fields: [:name, :sku, :description]
+        }
+      })
   end
 
   private
 
-  def redis_key
-    'product:id_' << self._id.to_s
-  end
+    def self.redis_key(id)
+      "product:id_#{id}"
+    end
 
-  def del_redis_key
-    $redis.del(redis_key)
-  end
+    def del_redis_key
+      $redis.del(Product.redis_key(self.id))
+    end
 
-  def save_elastic_search
-    $es_repository.save self
-  end
+    def save_elastic_search
+      $es_repository.save self
+    end
 
-  def delete_elestic_search
-    $es_repository.delete self
-  end
+    def delete_elestic_search
+      $es_repository.delete self
+    end
 end

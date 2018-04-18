@@ -1,6 +1,4 @@
 <h1>Editing Product</h1>
 
-<%= render 'form' %>
-
-<%= link_to 'Show', @product %> |
+<%= render 'form', method: :put, url: product_path(@product.id) %>
 <%= link_to 'Back', products_path %>
