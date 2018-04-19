@@ -2,18 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Product, type: :model do
   before(:each) do
-    @product = Product.new(name: "Notebook")
+    @product = Product.new(name: "Notebook", sku: "i7-8GB")
   end
 
   context "product valid" do
-    it "is valid with sku alphanumeric" do
-      @product.sku = "i7 8GB"
-
-      expect(@product).to be_valid
-      expect(@product.save).to be_truthy
-    end
-
-    it "it valid with name" do
+    it "is valid with name and sku" do
       expect(@product).to be_valid
       expect(@product.save).to be_truthy
     end
@@ -38,7 +31,7 @@ RSpec.describe Product, type: :model do
 
   context "product not valid" do
     it "is not valid with sku different of alphanumeric" do
-      @product.sku = "!?;**@"
+      @product.sku = "!?;*-+*@"
 
       expect(@product).to_not be_valid
       expect(@product.save).to be_falsey
@@ -46,6 +39,13 @@ RSpec.describe Product, type: :model do
 
     it "is not valid without name" do
       @product.name = nil
+
+      expect(@product).to_not be_valid
+      expect(@product.save).to be_falsey
+    end
+
+    it "is not valid without sku" do
+      @product.sku = nil
 
       expect(@product).to_not be_valid
       expect(@product.save).to be_falsey
@@ -61,9 +61,8 @@ RSpec.describe Product, type: :model do
       expect(@product.save).to be_falsey
     end
 
-    it "is not valid with bar_code different of numeric" do
-      @product.bar_code = "i@-+2@sd"
-      
+    it "is not valid with bar_code different of numeric string" do
+      @product.bar_code = "!@#asrtdgg"
       expect(@product).to_not be_valid
       expect(@product.save).to be_falsey
     end
@@ -89,7 +88,7 @@ RSpec.describe Product, type: :model do
       expect(@product.save).to be_truthy
 
       product_db = Product.last
-      expect(@product).to eql? product_db
+      expect(@product).to eq product_db
     end
 
     it "save product without bar_code" do
@@ -97,10 +96,13 @@ RSpec.describe Product, type: :model do
       expect(@product.save).to be_truthy
 
       product_db = Product.last
-      expect(@product).to eql? product_db
+      expect(@product).to eq product_db
     end
   end
+
+  after(:each) do
+    Mongoid::Config.purge!
+    $redis.keys.each {|k| $redis.del k}
+    system "curl -XDELETE localhost:9200/repository"
+  end
 end
-
-
-
