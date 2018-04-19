@@ -28,6 +28,10 @@ gem 'bson_ext'
 # Redis
 gem 'redis-rails'
 gem 'redis-namespace'
+gem 'redis', '~> 4.0', '>= 4.0.1'
+
+# Sidekiq
+gem 'sidekiq', '~> 5.0', '>= 5.0.5'
 
 # ElasticSearch
 gem 'elasticsearch-model', github: 'elastic/elasticsearch-rails', branch: '5.x'
