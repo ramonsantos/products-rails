@@ -50,9 +50,12 @@ gem 'elasticsearch-persistence', github: 'elastic/elasticsearch-rails', branch: 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-  
+  gem 'pry-byebug', '~> 3.4'
+
   # Rspec
   gem 'rspec-rails', '~> 3.7'
+
+  gem "factory_girl_rails", "~> 4.0"
 end
 
 group :development do
@@ -63,3 +66,6 @@ group :development do
   gem 'spring'
 end
 
+group :test do
+  gem 'rspec-sidekiq'
+end

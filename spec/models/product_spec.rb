@@ -2,6 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Product, type: :model do
   before(:each) do
+    Mongoid::Config.purge!
+    $redis.keys.each {|k| $redis.del k}
+    system "curl -XDELETE localhost:9200/repository"
+
     @product = Product.new(name: "Notebook", sku: "i7-8GB")
   end
 
@@ -98,11 +102,5 @@ RSpec.describe Product, type: :model do
       product_db = Product.last
       expect(@product).to eq product_db
     end
-  end
-
-  after(:each) do
-    Mongoid::Config.purge!
-    $redis.keys.each {|k| $redis.del k}
-    system "curl -XDELETE localhost:9200/repository"
   end
 end

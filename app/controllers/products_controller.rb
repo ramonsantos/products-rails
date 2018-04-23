@@ -68,6 +68,15 @@ class ProductsController < ApplicationController
     end
   end
 
+  # GET /products-report
+  def report
+    ProductsWorker.perform_async
+
+    respond_to do |format|
+      format.html { redirect_to products_url, notice: 'O relatório será gerado.' }
+    end
+  end
+
   private
 
   def find_product
@@ -84,6 +93,6 @@ class ProductsController < ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:name, :sku, :description, :quantity, :price)
+    params.require(:product).permit(:name, :sku, :description, :quantity, :price, :bar_code)
   end
 end

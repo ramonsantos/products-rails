@@ -64,6 +64,7 @@ GEM
     bson_ext (1.5.1)
     builder (3.2.3)
     byebug (10.0.2)
+    coderay (1.1.2)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     coffee-rails (4.1.1)
@@ -91,6 +92,11 @@ GEM
     equalizer (0.0.11)
     erubis (2.7.0)
     execjs (2.7.0)
+    factory_girl (4.9.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (4.9.0)
+      factory_girl (~> 4.9.0)
+      railties (>= 3.0.0)
     faraday (0.14.0)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.23)
@@ -113,6 +119,7 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.0)
       mini_mime (>= 0.1.1)
+    method_source (0.9.0)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
@@ -131,6 +138,12 @@ GEM
       mini_portile2 (~> 2.3.0)
     optionable (0.2.0)
     origin (2.3.1)
+    pry (0.11.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
+    pry-byebug (3.6.0)
+      byebug (~> 10.0)
+      pry (~> 0.10)
     rack (1.6.9)
     rack-protection (2.0.1)
       rack
@@ -200,6 +213,9 @@ GEM
       rspec-expectations (~> 3.7.0)
       rspec-mocks (~> 3.7.0)
       rspec-support (~> 3.7.0)
+    rspec-sidekiq (3.0.3)
+      rspec-core (~> 3.0, >= 3.0.0)
+      sidekiq (>= 2.4.0)
     rspec-support (3.7.1)
     sass (3.5.6)
       sass-listen (~> 4.0.0)
@@ -260,14 +276,17 @@ DEPENDENCIES
   elasticsearch-model!
   elasticsearch-persistence!
   elasticsearch-rails!
+  factory_girl_rails (~> 4.0)
   jbuilder (~> 2.0)
   jquery-rails
   mongoid (~> 4.0, >= 4.0.2)
+  pry-byebug (~> 3.4)
   rails (= 4.2.9)
   redis (~> 4.0, >= 4.0.1)
   redis-namespace
   redis-rails
   rspec-rails (~> 3.7)
+  rspec-sidekiq
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   sidekiq (~> 5.0, >= 5.0.5)
