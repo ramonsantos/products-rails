@@ -68,7 +68,7 @@ class ProductsController < ApplicationController
     end
   end
 
-  # GET /products-report
+  # GET /report
   def report
     ProductsWorker.perform_async
 
