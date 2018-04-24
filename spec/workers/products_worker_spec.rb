@@ -4,10 +4,7 @@ CSV_FILE = "#{Rails.root}/tmp/spec/file.csv"
 
 RSpec.describe ProductsWorker, type: :worker do
   before(:each) do
-    Mongoid::Config.purge!
-    $redis.keys.each {|k| $redis.del k}
-    system "curl -XDELETE localhost:9200/repository"
-
+    Product.destroy_all
     File.delete(CSV_FILE) if File.exist?(CSV_FILE)
   end
 
@@ -35,5 +32,9 @@ RSpec.describe ProductsWorker, type: :worker do
 
   after(:each) do
     Sidekiq::Testing.fake!
+  end
+
+  after(:all) do
+    Product.destroy_all
   end
 end

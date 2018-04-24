@@ -33,7 +33,6 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.save
-
         format.html { redirect_to @product, notice: 'Product was successfully created.' }
         format.json { render :show, status: :created, location: @product }
       else
@@ -48,7 +47,6 @@ class ProductsController < ApplicationController
   def update
     respond_to do |format|
       if @product.update(product_params)
-
         format.html { redirect_to @product, notice: 'Product was successfully updated.' }
         format.json { render :show, status: :ok, location: @product }
       else
@@ -79,20 +77,20 @@ class ProductsController < ApplicationController
 
   private
 
-  def find_product
-    @product = Product.find(params[:id])
-  end
-
-  def set_product
-    @product = Product.from_redis(params[:id])
-
-    if @product.nil?
+    def find_product
       @product = Product.find(params[:id])
-      @product.to_redis
     end
-  end
 
-  def product_params
-    params.require(:product).permit(:name, :sku, :description, :quantity, :price, :bar_code)
-  end
+    def set_product
+      @product = Product.from_redis(params[:id])
+
+      if @product.nil?
+        @product = Product.find(params[:id])
+        @product.to_redis
+      end
+    end
+
+    def product_params
+      params.require(:product).permit(:name, :sku, :description, :quantity, :price, :bar_code)
+    end
 end

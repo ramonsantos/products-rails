@@ -10,10 +10,10 @@ class Product
   field :bar_code, type: String
 
   validates_presence_of :name, :sku
-  validates_length_of :bar_code, :in => 8..13, allow_nil: true
+  validates_length_of :bar_code, :in => 8..13, allow_blank: true
   validates_numericality_of :price, :only_float => true, allow_nil: true, :greater_than => 0.0
   validates_format_of :sku, :with => /\A[A-Za-z0-9\-]+\Z/
-  validates_format_of :bar_code, :with => /\A[0-9]+\Z/, allow_nil: true
+  validates_format_of :bar_code, :allow_blank => true, :with => /\A[0-9]+\Z/
 
   after_save :save_elastic_search, :to_redis
   after_destroy :delete_elestic_search, :del_redis_key
