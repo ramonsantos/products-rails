@@ -17,6 +17,14 @@ FactoryGirl.define do
     bar_code "1234567890"
   end
 
+  factory :minimal_valid_product, :class => Product do
+    name "Notebook"
+    sku "i78GB"
+    description ""
+    quantity nil
+    price nil
+    bar_code nil
+  end
 end
 
 

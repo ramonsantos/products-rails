@@ -4,7 +4,7 @@ RSpec.describe Product, type: :model do
   before(:each) do
     Product.destroy_all
 
-    @product = Product.new(name: "Notebook", sku: "i7-8GB")
+    @product = build(:minimal_valid_product)
   end
 
   context "product valid" do
@@ -65,6 +65,7 @@ RSpec.describe Product, type: :model do
 
     it "is not valid with bar_code different of numeric string" do
       @product.bar_code = "!@#asrtdgg"
+
       expect(@product).to_not be_valid
       expect(@product.save).to be_falsey
     end

@@ -24,9 +24,7 @@ RSpec.describe ProductsWorker, type: :worker do
       products = CSV.read(CSV_FILE, {:col_sep => ";", :row_sep => "\n"})
         .map { |x| Product.new(name: x[0], sku: x[1], description: x[2], quantity: x[3], price: x[4], bar_code: x[5]).to_hash.except! :id, :updated_at, :created_at}
 
-      expect(products_db[0]).to eq products[0]
-      expect(products_db[1]).to eq products[1]
-      expect(products_db[2]).to eq nil
+      expect(products_db).to eq products
     end
   end
 
