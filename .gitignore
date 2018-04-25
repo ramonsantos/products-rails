@@ -11,4 +11,7 @@
 /log/*
 !/log/.keep
 /tmp
+
+# Tools
 .byebug_history
+coverage

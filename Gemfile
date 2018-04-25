@@ -56,6 +56,9 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.7'
 
   gem "factory_girl_rails", "~> 4.0"
+
+  # Test coverage
+  gem 'simplecov', '~> 0.16.1'
 end
 
 group :development do
