@@ -102,8 +102,4 @@ RSpec.describe Product, type: :model do
       expect(@product).to eq product_db
     end
   end
-
-  after(:all) do
-    Product.destroy_all
-  end
 end
