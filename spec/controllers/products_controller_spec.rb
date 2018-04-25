@@ -17,14 +17,26 @@ RSpec.describe ProductsController, type: :controller do
   end
 
   describe "GET #report" do
-    it "returns a redirect response" do
-      get :report
-      expect(response).to redirect_to(products_path) 
+    context "controller behavior" do
+      before(:each) do
+        get :report
+      end
+
+      it "returns a redirect response" do
+        expect(response).to redirect_to(products_path)
+      end
+
+      it "shows flash notice" do
+        expect(flash[:notice]).to match(/relatório será gerado/)
+      end
     end
 
-    it "shows flash notice" do
-      get :report
-      expect(flash[:notice]).to match(/relatório será gerado/)
+    context "job execution" do
+      it "calls perform_async" do
+        expect {
+          get :report
+        }.to change(ProductsWorker.jobs, :size).by(1)
+      end
     end
   end
 
