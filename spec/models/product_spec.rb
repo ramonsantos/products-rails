@@ -56,10 +56,10 @@ RSpec.describe Product, type: :model do
     it "is not valid with price less than or equal to 0.0" do
       @product.price = 0.0
       expect(@product).to_not be_valid
-    
+
       @product.price = -1.0
       expect(@product).to_not be_valid
-      
+
       expect(@product.save).to be_falsey
     end
 

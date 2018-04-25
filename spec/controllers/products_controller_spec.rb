@@ -9,15 +9,38 @@ RSpec.describe ProductsController, type: :controller do
     {name: nil, sku: nil}
   }
 
+  before(:each) do
+    Product.destroy_all
+  end
+
   describe "GET #index" do
-    it "returns a success response" do
-      get :index
-      expect(response).to be_success
+    context "with all products" do
+      it "returns a success response" do
+        get :index
+        expect(response).to be_success
+      end
+    end
+
+    context "with products by search" do
+      it "product found" do
+        create(:valid_product_a)
+
+        get :index, search: "note"
+        expect(assigns(:products).size).to eq(1)
+      end
+
+      it "product not found" do
+        create(:valid_product_a)
+
+        get :index, search: "livw"
+
+        expect(assigns(:products).size).to eq(0)
+      end
     end
   end
 
   describe "GET #report" do
-    context "controller behavior" do
+    context "controller workflow" do
       before(:each) do
         get :report
       end
@@ -43,6 +66,14 @@ RSpec.describe ProductsController, type: :controller do
   describe "GET #show" do
     it "returns a success response" do
       product = Product.create! valid_attributes
+      get :show, {:id => product.to_param}
+      expect(response).to be_success
+    end
+
+    it "returns a success response without Redis key" do
+      product = Product.create! valid_attributes
+      $redis.del("product:id_#{product.id}")
+
       get :show, {:id => product.to_param}
       expect(response).to be_success
     end

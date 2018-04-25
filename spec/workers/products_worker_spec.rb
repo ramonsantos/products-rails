@@ -12,7 +12,7 @@ RSpec.describe ProductsWorker, type: :worker do
     CSV.read(Rails.root.join("spec", "fixtures", "products_test.csv"), {:col_sep => ";", :row_sep => "\n"})
   }
 
-  context 'export products report' do
+  describe 'export products report' do
     it 'is processing worker' do
       expect(ProductsWorker).to be_processed_in :default
     end
