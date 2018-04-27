@@ -71,7 +71,7 @@ class ProductsController < ApplicationController
     ProductsWorker.perform_async
 
     respond_to do |format|
-      format.html { redirect_to products_url, notice: 'O relatório será gerado.' }
+      format.html { redirect_to products_url, notice: 'O relatório será gerado e enviado por e-mail!'}
     end
   end
 

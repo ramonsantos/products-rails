@@ -50,7 +50,7 @@ RSpec.describe ProductsController, type: :controller do
       end
 
       it "shows flash notice" do
-        expect(flash[:notice]).to match(/relatório será gerado/)
+        expect(flash[:notice]).to match(/relatório será gerado e enviado/)
       end
     end
 
@@ -66,6 +66,7 @@ RSpec.describe ProductsController, type: :controller do
   describe "GET #show" do
     it "returns a success response" do
       product = Product.create! valid_attributes
+
       get :show, {:id => product.to_param}
       expect(response).to be_success
     end
