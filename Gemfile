@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.9'
 # Use SCSS for stylesheets
@@ -9,8 +8,6 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.1.0'
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -22,30 +19,21 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 # MongoDB
-gem 'mongoid', '~> 4.0', '>= 4.0.2'
 gem 'bson_ext'
+gem 'mongoid', '~> 4.0', '>= 4.0.2'
 
 # Redis
-gem 'redis-rails'
-gem 'redis-namespace'
 gem 'redis', '~> 4.0', '>= 4.0.1'
+gem 'redis-namespace'
+gem 'redis-rails'
 
 # Sidekiq
 gem 'sidekiq', '~> 5.0', '>= 5.0.5'
 
 # ElasticSearch
 gem 'elasticsearch-model', github: 'elastic/elasticsearch-rails', branch: '5.x'
-gem 'elasticsearch-rails', github: 'elastic/elasticsearch-rails', branch: '5.x'
 gem 'elasticsearch-persistence', github: 'elastic/elasticsearch-rails', branch: '5.x'
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use Unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+gem 'elasticsearch-rails', github: 'elastic/elasticsearch-rails', branch: '5.x'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -55,7 +43,8 @@ group :development, :test do
   # Rspec
   gem 'rspec-rails', '~> 3.7'
 
-  gem "factory_girl_rails", "~> 4.0"
+  # Factory Girl
+  gem 'factory_girl_rails', '~> 4.0'
 
   # Test coverage
   gem 'simplecov', '~> 0.16.1'
@@ -67,8 +56,12 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  # Rubocop
+  gem 'rubocop', require: false
 end
 
 group :test do
+  #RSpec Sidekiq
   gem 'rspec-sidekiq'
 end
