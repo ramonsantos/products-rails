@@ -5,11 +5,11 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
-    if params[:search].present?
-      @products = Product.search(params[:search])
-    else
-      @products = Product.all
-    end
+    @products = if params[:search].present?
+                  Product.search(params[:search])
+                else
+                  Product.all
+                end
   end
 
   # GET /products/1
@@ -71,26 +71,26 @@ class ProductsController < ApplicationController
     ProductsWorker.perform_async
 
     respond_to do |format|
-      format.html { redirect_to products_url, notice: 'O relatório será gerado e enviado por e-mail!'}
+      format.html { redirect_to products_url, notice: 'O relatório será gerado e enviado por e-mail!' }
     end
   end
 
   private
 
-    def find_product
+  def find_product
+    @product = Product.find(params[:id])
+  end
+
+  def set_product
+    @product = Product.from_redis(params[:id])
+
+    if @product.nil?
       @product = Product.find(params[:id])
+      @product.to_redis
     end
+  end
 
-    def set_product
-      @product = Product.from_redis(params[:id])
-
-      if @product.nil?
-        @product = Product.find(params[:id])
-        @product.to_redis
-      end
-    end
-
-    def product_params
-      params.require(:product).permit(:name, :sku, :description, :quantity, :price, :bar_code)
-    end
+  def product_params
+    params.require(:product).permit(:name, :sku, :description, :quantity, :price, :bar_code)
+  end
 end
