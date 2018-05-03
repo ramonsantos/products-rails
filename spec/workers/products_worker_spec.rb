@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-CSV_FILE_PATH = "#{Rails.root}/tmp/spec/file.csv"
+CSV_FILE_PATH = "#{Rails.root}/tmp/spec/file.csv".freeze
 
 RSpec.describe ProductsWorker, type: :worker do
   before(:each) do
@@ -8,9 +8,9 @@ RSpec.describe ProductsWorker, type: :worker do
     File.delete(CSV_FILE_PATH) if File.exist?(CSV_FILE_PATH)
   end
 
-  let!(:csv_products_test) {
-    CSV.read(Rails.root.join("spec", "fixtures", "products_test.csv"), {:col_sep => ";", :row_sep => "\n"})
-  }
+  let!(:csv_products_test) do
+    CSV.read(Rails.root.join('spec', 'fixtures', 'products_test.csv'), col_sep: ';', row_sep: "\n")
+  end
 
   describe 'export products report' do
     it 'is processing worker' do
@@ -24,7 +24,7 @@ RSpec.describe ProductsWorker, type: :worker do
       Sidekiq::Testing.disable!
       ProductsWorker.new.perform CSV_FILE_PATH
 
-      products = CSV.read(CSV_FILE_PATH, {:col_sep => ";", :row_sep => "\n"})
+      products = CSV.read(CSV_FILE_PATH, col_sep: ';', row_sep: "\n")
       expect(csv_products_test).to eq products
     end
   end
