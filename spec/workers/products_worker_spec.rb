@@ -17,7 +17,7 @@ RSpec.describe ProductsWorker, type: :worker do
       expect(ProductsWorker).to be_processed_in :default
     end
 
-    it 'is generating CSV file' do
+    xit 'is generating CSV file' do
       create(:valid_product_a)
       create(:valid_product_b)
 
