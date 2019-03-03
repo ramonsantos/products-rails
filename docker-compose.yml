@@ -1,0 +1,33 @@
+version: "3.3"
+
+version: "3.3"
+
+services:
+  mongo:
+    image: mongo
+    ports:
+    - "27017:27017"
+    networks:
+    - products-rails-network
+  elasticsearch:
+    image: elasticsearch:5.6.15
+    ports:
+      - "9200:9200"
+    networks:
+    - products-rails-network
+  kibana:
+    image: kibana:5.6.15
+    ports:
+      - "5601:5601"
+    networks:
+    - products-rails-network
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+    - products-rails-network
+
+networks:
+  products-rails-network:
+    driver: bridge
